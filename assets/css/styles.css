@@ -55,7 +55,7 @@ header {
     border-radius: 5px;
 }
 
-.city-list il {
+.listed-cities {
     border-top: solid 1px lightgray;
     padding: 10px 10px 10px 20px;
 }
@@ -75,7 +75,7 @@ header {
     border: solid 1px lightgray;
     border-radius: 5px;
     font-size: 20px;
-    padding: 40px 10px 40px 20px;
+    padding: 30px 10px 40px 20px;
     margin: 15px 0 0 15px;
 }
 
