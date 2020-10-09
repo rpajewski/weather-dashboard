@@ -79,6 +79,17 @@ header {
     margin: 15px 0 0 15px;
 }
 
+.city-banner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.icon {
+    height: 50px;
+    width: 50px;
+}
+
 #forecast {
     margin: 15px 0 0 18px;
 }

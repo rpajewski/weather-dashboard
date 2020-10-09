@@ -2,11 +2,11 @@ var cityInputEl = document.querySelector('#search-form');
 var userFormEl = document.querySelector("#user-search");
 var activeCityEl = document.querySelector('#active-city');
 var cityListEl = document.querySelector('#cities');
-var iconEl = document.querySelector('#icon');
 var tempEl = document.querySelector('#temp');
 var humidityEl = document.querySelector('#humidity');
 var windEl = document.querySelector('#wind-speed');
 var uvIndexEl = document.querySelector('#uv-index');
+var forecastContainerEl = document.querySelector('#forecast-container');
 
 
 // submit button handler
@@ -29,6 +29,8 @@ var displayWeather = function(weather) {
         return;
     }
 
+    console.log(weather);
+
     var lon = weather.city.coord.lon;
     var lat = weather.city.coord.lat;
     fetch (
@@ -37,10 +39,8 @@ var displayWeather = function(weather) {
     .then(function(response) {
         response.json().then(function(data) {
             currentUvIndex = data[0].value;
-            console.log(currentUvIndex);
         })
     })
-    console.log(weather);
 
     setTimeout(function tick() {
         // place current cities weather on top
@@ -50,14 +50,24 @@ var displayWeather = function(weather) {
         var humid = weather.list[0].main.humidity;
         var wind = weather.list[0].wind.speed;
         var uvIndex = currentUvIndex;
-        var weatherIconUrl = `http://openweathermap.org/img/w/${icon}.png`;
-        console.log(weatherIconUrl);
+        var weatherIconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+
+        // get current day
+        var currentTime = new Date();
+        var dd = String(currentTime.getDate()).padStart(2, '0');
+        var mm = String(currentTime.getMonth() + 1).padStart(2, '0');
+        var yyyy = currentTime.getFullYear();
+
+        currentTime = `${mm}/${dd}/${yyyy}`;
 
         // place elements on screen
-        activeCityEl.innerHTML = "";
-        activeCityEl.innerHTML = `${cityName}`;
-
+        iconEl = document.createElement('img');
         iconEl.setAttribute('src', weatherIconUrl);
+        iconEl.className = 'icon';
+        
+        activeCityEl.innerHTML = "";
+        activeCityEl.innerHTML = `${cityName}  ${currentTime} `;
+        activeCityEl.appendChild(iconEl);
 
         tempEl.innerHTML = "";
         tempEl.innerHTML = `${temp} °F`;
@@ -78,7 +88,37 @@ var displayWeather = function(weather) {
         cityListEl.appendChild(listCityEl);
 
         // loop over weather for 5 day forecast
-    }, 250);
+        for (var i = 0; i < weather.length; i + 8) {
+            var forecastDate = weather.list[i].dt_txt;
+            var forecastIcon = weather.list[i].weather[i].icon;
+            var forecastTemp = weather.list[i].main.temp;
+            var forecastHumid = weather.list[i].main.humidity;
+            var forecastIconUrl = `http://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
+            
+            // create forecast containers
+            dayEl = document.createElement('div');
+            dayEl.className = 'day';
+
+            forecastDay = document.createElement('h3');
+            forecastDay.textContent = forecastDate;
+            dayEl.appendChild(forecastDay);
+
+            forecastIconEl = document.createElement('img');
+            forecastIconEl.setAttribute('src', forecastIconUrl);
+            forecastIconEl.className = 'icon';
+            dayEl.appendChild(forecastIconEl);
+
+            forecastTempEl = document.createElement('p');
+            forecastTempEl.innerHTML = `Temp: ${forecastTemp} °F`;
+            dayEl.appendChild(forecastTempEl);
+
+            forecastHumidEl = document.createElement('p');
+            forecastHumidEl.innerHTML = `Humidity: ${forecastHumid}%`;
+            dayEl.appendChild(forecastHumidEl);
+
+            forecastContainerEl.appendChild(dayEl);
+        }
+    }, 500);
 };
 
 var getCityWeather = function(city) {
