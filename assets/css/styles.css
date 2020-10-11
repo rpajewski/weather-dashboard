@@ -94,6 +94,24 @@ header {
     margin: 15px 0 0 18px;
 }
 
+#uv-index {
+    padding: 8px 10px 8px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.uv-index-green {
+    background-color: green;
+}
+
+.uv-index-orange {
+    background-color: orange;
+}
+
+.uv-index-red {
+    background-color: red;
+}
+
 #forecast-container {
     display: flex;
     flex-wrap: wrap;

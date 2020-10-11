@@ -81,42 +81,66 @@ var displayWeather = function(weather) {
         uvIndexEl.textContent = "";
         uvIndexEl.textContent = uvIndex;
 
+        if (uvIndex < 3) {
+            uvIndexEl.removeAttribute('class', 'uv-index-orange');
+            uvIndexEl.removeAttribute('class', 'uv-index-red');
+            uvIndexEl.setAttribute('class', 'uv-index-green');
+        }
+        else if (uvIndex < 7 && uvIndex > 3) {
+            uvIndexEl.removeAttribute('class', 'uv-index-green');
+            uvIndexEl.removeAttribute('class', 'uv-index-red');
+            uvIndexEl.setAttribute('class', 'uv-index-orange');
+        }
+        else {
+            uvIndexEl.removeAttribute('class', 'uv-index-orange');
+            uvIndexEl.removeAttribute('class', 'uv-index-green');
+            uvIndexEl.setAttribute('class', 'uv-index-red');
+        }
+
         // add new city to list
         listCityEl = document.createElement('li');
         listCityEl.textContent = cityName;
         listCityEl.setAttribute('class', 'listed-cities');
         cityListEl.appendChild(listCityEl);
 
+        forecastContainerEl.textContent = '';
+
         // loop over weather for 5 day forecast
-        for (var i = 0; i < weather.length; i + 8) {
-            var forecastDate = weather.list[i].dt_txt;
-            var forecastIcon = weather.list[i].weather[i].icon;
-            var forecastTemp = weather.list[i].main.temp;
-            var forecastHumid = weather.list[i].main.humidity;
-            var forecastIconUrl = `http://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
-            
-            // create forecast containers
-            dayEl = document.createElement('div');
-            dayEl.className = 'day';
+        for (var i = 0; i < weather.list.length; i++) {
+            if (weather.list[i].dt_txt.indexOf('12:00:00') !== -1) {
+                // var forecastDate = weather.list[i].dt_txt;
+                var forecastIcon = weather.list[i].weather[0].icon;
+                var forecastTemp = weather.list[i].main.temp;
+                var forecastHumid = weather.list[i].main.humidity;
+                var forecastIconUrl = `http://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
+                
+                // create forecast containers
+                dayEl = document.createElement('div');
+                dayEl.className = 'day';
 
-            forecastDay = document.createElement('h3');
-            forecastDay.textContent = forecastDate;
-            dayEl.appendChild(forecastDay);
+                dd++;
+                currentTime = `${mm}/${dd}/${yyyy}`;
+                forecastDay = document.createElement('h3');
+                forecastDay.textContent = currentTime;
+                dayEl.appendChild(forecastDay);
 
-            forecastIconEl = document.createElement('img');
-            forecastIconEl.setAttribute('src', forecastIconUrl);
-            forecastIconEl.className = 'icon';
-            dayEl.appendChild(forecastIconEl);
+                forecastIconEl = document.createElement('img');
+                forecastIconEl.setAttribute('src', forecastIconUrl);
+                forecastIconEl.className = 'icon';
+                dayEl.appendChild(forecastIconEl);
 
-            forecastTempEl = document.createElement('p');
-            forecastTempEl.innerHTML = `Temp: ${forecastTemp} °F`;
-            dayEl.appendChild(forecastTempEl);
+                forecastTempEl = document.createElement('p');
+                forecastTempEl.innerHTML = `Temp: ${forecastTemp} °F`;
+                dayEl.appendChild(forecastTempEl);
 
-            forecastHumidEl = document.createElement('p');
-            forecastHumidEl.innerHTML = `Humidity: ${forecastHumid}%`;
-            dayEl.appendChild(forecastHumidEl);
+                dayEl.appendChild(document.createElement('br'));
 
-            forecastContainerEl.appendChild(dayEl);
+                forecastHumidEl = document.createElement('p');
+                forecastHumidEl.innerHTML = `Humidity: ${forecastHumid}%`;
+                dayEl.appendChild(forecastHumidEl);
+
+                forecastContainerEl.appendChild(dayEl);
+            }
         }
     }, 500);
 };
