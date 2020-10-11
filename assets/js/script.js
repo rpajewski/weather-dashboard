@@ -22,6 +22,8 @@ var formSubmitHandler = function(event) {
     }
 };
 
+
+// place weather on screen
 var displayWeather = function(weather) {
     // check if api found cities weather
     if (!weather) {
@@ -30,20 +32,24 @@ var displayWeather = function(weather) {
     }
 
     console.log(weather);
-
+    // get long & lat for UV Index pull
     var lon = weather.city.coord.lon;
     var lat = weather.city.coord.lat;
     fetch (
         `https://api.openweathermap.org/data/2.5/uvi/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=26f877486e8bfd26e84f29be119ce7e6`
     )
+    // set current uvIndex to use later
     .then(function(response) {
         response.json().then(function(data) {
             currentUvIndex = data[0].value;
         })
     })
 
+    // timeout to make sure uvIndex returns before trying to place it
     setTimeout(function tick() {
         // place current cities weather on top
+
+        // banner city variables
         var cityName = weather.city.name;
         var icon = weather.list[0].weather[0].icon;
         var temp = weather.list[0].main.temp;
@@ -81,6 +87,7 @@ var displayWeather = function(weather) {
         uvIndexEl.textContent = "";
         uvIndexEl.textContent = uvIndex;
 
+        // if, else if and else to set classes based on uv index rating
         if (uvIndex < 3) {
             uvIndexEl.removeAttribute('class', 'uv-index-orange');
             uvIndexEl.removeAttribute('class', 'uv-index-red');
@@ -108,7 +115,7 @@ var displayWeather = function(weather) {
         // loop over weather for 5 day forecast
         for (var i = 0; i < weather.list.length; i++) {
             if (weather.list[i].dt_txt.indexOf('12:00:00') !== -1) {
-                // var forecastDate = weather.list[i].dt_txt;
+                // variables for 5 day forecast
                 var forecastIcon = weather.list[i].weather[0].icon;
                 var forecastTemp = weather.list[i].main.temp;
                 var forecastHumid = weather.list[i].main.humidity;
@@ -118,6 +125,7 @@ var displayWeather = function(weather) {
                 dayEl = document.createElement('div');
                 dayEl.className = 'day';
 
+                // add day to currentTime and establish new date for 5 day forecast
                 dd++;
                 currentTime = `${mm}/${dd}/${yyyy}`;
                 forecastDay = document.createElement('h3');
@@ -145,6 +153,7 @@ var displayWeather = function(weather) {
     }, 500);
 };
 
+// search city based on user feedback
 var getCityWeather = function(city) {
     // format the openweather api url
     var apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=26f877486e8bfd26e84f29be119ce7e6`;
