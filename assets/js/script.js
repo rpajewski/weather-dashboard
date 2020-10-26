@@ -56,7 +56,7 @@ var displayWeather = function(weather) {
         var humid = weather.list[0].main.humidity;
         var wind = weather.list[0].wind.speed;
         var uvIndex = currentUvIndex;
-        var weatherIconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+        var weatherIconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
         // get current day
         var currentTime = new Date();
