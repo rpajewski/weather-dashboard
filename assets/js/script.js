@@ -105,10 +105,7 @@ var displayWeather = function(weather) {
         }
 
         // add new city to list
-        listCityEl = document.createElement('li');
-        listCityEl.textContent = cityName;
-        listCityEl.setAttribute('class', 'listed-cities');
-        cityListEl.appendChild(listCityEl);
+        searchHistory(weather);
 
         forecastContainerEl.textContent = '';
 
@@ -151,6 +148,23 @@ var displayWeather = function(weather) {
             }
         }
     }, 500);
+};
+
+var searchHistory = function(weather) {
+    var cityHistory = weather.city.name;
+    // create and append searched city
+    listCityEl = document.createElement('li');
+    listCityEl.textContent = cityHistory;
+    listCityEl.setAttribute('class', 'listed-cities');
+    cityListEl.appendChild(listCityEl);
+
+    // make history clickable
+    listCityEl.addEventListener('click', function() {
+        getCityWeather(cityHistory);
+    })
+
+    // save to local storage
+    localStorage.setItem('key', cityHistory);
 };
 
 // search city based on user feedback
