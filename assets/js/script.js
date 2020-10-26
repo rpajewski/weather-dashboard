@@ -7,7 +7,7 @@ var humidityEl = document.querySelector('#humidity');
 var windEl = document.querySelector('#wind-speed');
 var uvIndexEl = document.querySelector('#uv-index');
 var forecastContainerEl = document.querySelector('#forecast-container');
-
+var storage = 1;
 
 // submit button handler
 var formSubmitHandler = function(event) {
@@ -164,7 +164,9 @@ var searchHistory = function(weather) {
     })
 
     // save to local storage
-    localStorage.setItem('key', cityHistory);
+    var saveCity = `City: ${storage}`
+    localStorage.setItem(saveCity, cityHistory);
+    storage++;
 };
 
 // search city based on user feedback
