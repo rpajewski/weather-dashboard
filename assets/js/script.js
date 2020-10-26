@@ -116,7 +116,7 @@ var displayWeather = function(weather) {
                 var forecastIcon = weather.list[i].weather[0].icon;
                 var forecastTemp = weather.list[i].main.temp;
                 var forecastHumid = weather.list[i].main.humidity;
-                var forecastIconUrl = `http://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
+                var forecastIconUrl = `https://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
                 
                 // create forecast containers
                 dayEl = document.createElement('div');
